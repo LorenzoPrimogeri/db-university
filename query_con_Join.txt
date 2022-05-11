@@ -24,18 +24,46 @@ on courses.id = course_teacher.course_id
 where course_teacher.teacher_id=44;
 
 4. Selezionare tutti gli studenti con i dati relativi al corso di laurea a cui sono iscritti e il
-
-
 relativo dipartimento, in ordine alfabetico per cognome e nome
 
+SELECT * 
+FROM `degrees`
+INNER JOIN students
+on degrees.id = students.degree_id
+ORDER BY students.surname ASC, students.name ASC;
 
 5. Selezionare tutti i corsi di laurea con i relativi corsi e insegnanti
 
+SELECT courses.name, degrees.name, teachers.name
+FROM `courses`
+INNER join degrees
+on degrees.id=courses.degree_id
+inner join course_teacher
+on courses.id=course_teacher.course_id
+inner join teachers
+on teachers.id=course_teacher.teacher_id;
 
 6. Selezionare tutti i docenti che insegnano nel Dipartimento di Matematica (54)
 
+SELECT teachers.name, teachers.id
+FROM `teachers`
+inner join course_teacher
+on teachers.id=course_teacher.teacher_id
+INNER join courses
+on courses.id=course_teacher.course_id
+inner join degrees
+on degrees.id = courses.degree_id
+inner join departments
+on departments.id= degrees.department_id
+where departments.name="Dipartimento di Matematica";
 
 7. BONUS: Selezionare per ogni studente quanti tentativi d’esame ha sostenuto per
 superare ciascuno dei suoi esami
 
+SELECT students.name ,count(students.id)
+FROM `students`
+INNER join exam_student
+on exam_student.student_id = students.id  
+where vote<=17
+GROUP by(students.id);
 
